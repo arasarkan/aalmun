@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../services/firebase';
+// Logo dosyasını import ediyoruz
+import logo from '../../assets/logo.png';
 
 const Navbar: React.FC = () => {
   const { user } = useAuth();
@@ -22,8 +24,10 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-red-600 text-white shadow-md relative">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold z-10">
-          AALMUN'25
+        <Link to="/" className="flex items-center z-10">
+          {/* Logo ekliyoruz */}
+          <img src={logo} alt="AALMUN'25 Logo" className="h-12 mr-2" />
+          <span className="text-xl font-bold">AALMUN'25</span>
         </Link>
         
         {/* Desktop Navigation */}
