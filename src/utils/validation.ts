@@ -1,4 +1,18 @@
-export const validateApplicationForm = (formData: any): Record<string, string> => {
+// Önce bir arayüz tanımlayalım (isteğe bağlı ama iyi bir pratik)
+interface ApplicationFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  school: string;
+  grade: string;
+  experience: string;
+  committeePreference: string[];
+  positionPreference: string;
+}
+
+// Fonksiyon artık ikinci bir parametre alıyor: loggedInEmail
+export const validateApplicationForm = (formData: ApplicationFormData, loggedInEmail: string): Record<string, string> => {
   const errors: Record<string, string> = {};
   
   // First Name validation
@@ -15,11 +29,10 @@ export const validateApplicationForm = (formData: any): Record<string, string> =
     errors.lastName = 'Last name must be at least 2 characters';
   }
   
-  // Email validation
-  if (!formData.email.trim()) {
-    errors.email = 'Email is required';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    errors.email = 'Please enter a valid email address';
+  // --- GÜNCELLENMİŞ EMAIL VALIDATION ---
+  // Formdaki e-postanın, giriş yapmış kullanıcının e-postası ile eşleşip eşleşmediğini kontrol eder.
+  if (formData.email !== loggedInEmail) {
+    errors.email = 'The email must match your logged-in account.';
   }
   
   // Phone validation

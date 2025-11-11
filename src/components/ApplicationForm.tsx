@@ -4,9 +4,14 @@ import { validateApplicationForm } from '../utils/validation';
 import Button from './UI/Button';
 import FormInput from './UI/FormInput';
 
+// <-- DEĞİŞİKLİK 1: useAuth hook'unu import edin
+import { useAuth } from '../hooks/useAuth';
+
 const ApplicationForm: React.FC = () => {
+  // <-- DEĞİŞİKLİK 2: Hook'u çağırarak user nesnesini alın
+  const { user } = useAuth();
   const { submitApplication, error, loading } = useApplication();
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,7 +23,7 @@ const ApplicationForm: React.FC = () => {
     committeePreference: [] as string[],
     positionPreference: '',
   });
-  
+
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -53,7 +58,7 @@ const ApplicationForm: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error for this field when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
@@ -62,7 +67,7 @@ const ApplicationForm: React.FC = () => {
 
   const handleCommitteeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    
+
     if (checked) {
       // Add committee to preferences if not already there and under limit
       if (formData.committeePreference.length < 3) {
@@ -82,17 +87,19 @@ const ApplicationForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
-    const errors = validateApplicationForm(formData);
+    // Artık 'user' nesnesi tanımlı olduğu için bu satır çalışacak
+    const errors = validateApplicationForm(formData, user?.email || '');
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
     }
-    
+
     // Submit application
     const success = await submitApplication(formData);
-    
+
     if (success) {
       setSubmitSuccess(true);
     }
@@ -122,13 +129,13 @@ const ApplicationForm: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6">Application Form</h2>
-      
+
       {error && (
         <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormInput
@@ -140,7 +147,7 @@ const ApplicationForm: React.FC = () => {
             error={formErrors.firstName}
             required
           />
-          
+
           <FormInput
             label="Last Name"
             name="lastName"
@@ -151,7 +158,7 @@ const ApplicationForm: React.FC = () => {
             required
           />
         </div>
-        
+
         <FormInput
           label="Email"
           name="email"
@@ -161,7 +168,7 @@ const ApplicationForm: React.FC = () => {
           error={formErrors.email}
           required
         />
-        
+
         <FormInput
           label="Phone Number"
           name="phone"
@@ -171,7 +178,7 @@ const ApplicationForm: React.FC = () => {
           error={formErrors.phone}
           required
         />
-        
+
         <FormInput
           label="School"
           name="school"
@@ -181,7 +188,7 @@ const ApplicationForm: React.FC = () => {
           error={formErrors.school}
           required
         />
-        
+
         <FormInput
           label="Grade"
           name="grade"
@@ -192,7 +199,7 @@ const ApplicationForm: React.FC = () => {
           options={gradeOptions}
           required
         />
-        
+
         <FormInput
           label="Previous MUN Experience"
           name="experience"
@@ -203,7 +210,7 @@ const ApplicationForm: React.FC = () => {
           rows={4}
           required
         />
-        
+
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Committee Preferences (Select up to 3)
@@ -229,7 +236,7 @@ const ApplicationForm: React.FC = () => {
             <p className="mt-1 text-sm text-red-600">{formErrors.committeePreference}</p>
           )}
         </div>
-        
+
         <FormInput
           label="Position Preference"
           name="positionPreference"
@@ -240,7 +247,7 @@ const ApplicationForm: React.FC = () => {
           options={positionOptions}
           required
         />
-        
+
         <Button
           type="submit"
           variant="primary"

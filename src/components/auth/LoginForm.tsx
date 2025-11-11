@@ -28,19 +28,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setError('');
-    setLoading(true);
-
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
@@ -71,17 +58,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
           {loading ? 'Signing In...' : 'Sign In'}
         </Button>
       </form>
-      <div className="text-center mb-4">
-        <p className="text-gray-600">or</p>
-      </div>
-      <Button
-        variant="outline"
-        onClick={handleGoogleSignIn}
-        disabled={loading}
-        className="w-full mb-4"
-      >
-        Sign In with Google
-      </Button>
       <div className="text-center">
         <p className="text-gray-600">
           Don't have an account?{' '}
