@@ -28,7 +28,7 @@ code {
   .line-clamp-3 {
     display: -webkit-box;
     display: -moz-box;
-    display: box;
+    display: flex;
     -webkit-clamp: 3;
     -moz-clamp: 3;
     clamp: 3;
