@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAtsUfCkt6MOCfaplNF8kUEgQCEFehwnfA",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "aalmun-playground.firebaseapp.com",
   databaseURL: "https://aalmun-playground-default-rtdb.firebaseio.com",
   projectId: "aalmun-playground",
@@ -24,11 +24,11 @@ export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 
 // Initialize App Check with reCAPTCHA
-if (process.env.NODE_ENV === 'production') {
-  initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''),
-    isTokenAutoRefreshEnabled: true,
-  });
-}
+//if (process.env.NODE_ENV === 'production') {
+//  initializeAppCheck(app, {
+//    provider: new ReCaptchaV3Provider(process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''),
+//    isTokenAutoRefreshEnabled: true,
+//  });
+//}
 
 export default app;
