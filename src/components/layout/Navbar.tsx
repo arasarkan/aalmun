@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-red-600 text-white shadow-md relative">
+    <nav className="bg-red-700 text-white shadow-md relative">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center z-10">
           {/* Logo ekliyoruz */}
