@@ -22,7 +22,6 @@ export const AdminApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-  
     const errors: Record<string, string> = {};
     
     if (!formData.motivationLetter.trim()) {
@@ -49,9 +48,10 @@ export const AdminApplicationForm: React.FC = () => {
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Delegate"
+      applicationType="Admin"
     >
-      {}
+      {/* REMOVED the empty curly brace */}
+      
       <div className="mb-2 flex justify-end">
         <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
           Characters: {motivationLetterLength} / 150 (minimum)

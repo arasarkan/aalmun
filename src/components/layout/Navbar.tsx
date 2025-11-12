@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
               <span className="text-sm">Welcome, {user.displayName || user.email}</span>
               <button
                 onClick={handleSignOut}
-                className="bg-red-700 hover:bg-blue-800 px-3 py-1 rounded text-sm"
+                className="bg-red-800 hover:bg-blue-900 px-3 py-1 rounded text-sm"
               >
                 Sign Out
               </button>
@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
           ) : (
             <Link
               to="/apply"
-              className="bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded text-sm"
+              className="bg-red-800 hover:bg-blue-900 px-3 py-1 rounded text-sm"
             >
               Sign In
             </Link>
@@ -105,32 +105,32 @@ const Navbar: React.FC = () => {
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-blue-600 absolute top-full left-0 right-0 shadow-lg z-20">
+        <div className="md:hidden bg-[#7c1d36] absolute top-full left-0 right-0 shadow-lg z-20">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
             <Link
               to="/"
-              className={`hover:text-blue-200 ${isActive('/') ? 'text-blue-200' : ''}`}
+              className={`hover:text-red-200 ${isActive('/') ? 'text-red-200' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/about"
-              className={`hover:text-blue-200 ${isActive('/about') ? 'text-blue-200' : ''}`}
+              className={`hover:text-red-200 ${isActive('/about') ? 'text-red-200' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
             <Link
               to="/committees"
-              className={`hover:text-blue-200 ${isActive('/committees') ? 'text-blue-200' : ''}`}
+              className={`hover:text-red-200 ${isActive('/committees') ? 'text-red-200' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Committees
             </Link>
             <Link
               to="/apply"
-              className={`hover:text-blue-200 ${isActive('/apply') ? 'text-blue-200' : ''}`}
+              className={`hover:text-red-200 ${isActive('/apply') ? 'text-red-200' : ''}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Apply
@@ -138,7 +138,7 @@ const Navbar: React.FC = () => {
             {user && (
               <Link
                 to="/dashboard"
-                className={`hover:text-blue-200 ${isActive('/dashboard') ? 'text-blue-200' : ''}`}
+                className={`hover:text-red-200 ${isActive('/dashboard') ? 'text-red-200' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Dashboard
@@ -155,7 +155,7 @@ const Navbar: React.FC = () => {
                       handleSignOut();
                       setIsMenuOpen(false);
                     }}
-                    className="bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded text-sm self-start"
+                    className="bg-red-800 hover:bg-red-800 px-3 py-1 rounded text-sm self-start"
                   >
                     Sign Out
                   </button>
@@ -163,7 +163,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   to="/apply"
-                  className="bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded text-sm inline-block"
+                  className="bg-red-800 hover:bg-red-800 px-3 py-1 rounded text-sm inline-block"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign In

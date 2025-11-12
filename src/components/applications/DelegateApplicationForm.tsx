@@ -5,8 +5,11 @@ import FormInput from '../UI/FormInput';
 
 export const DelegateApplicationForm: React.FC = () => {
   const { submitApplication } = useApplication();
-  
+
   const [formData, setFormData] = useState({
+    schoolName: '',
+    grade: '',
+    previousExperience: '',
     committeePreference: [] as string[],
     motivationLetter: '',
   });
@@ -20,7 +23,7 @@ export const DelegateApplicationForm: React.FC = () => {
     'Joint Crisis Committee (JCC)',
     'Crisis Committee (CC)',
     'International Olympic Committee (IOC)',
-    'United States Customs Court (USCC)'
+    'United States Supreme Court (USSC)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -51,7 +54,12 @@ export const DelegateApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
+    // 2. ADDED BACK validation for the missing fields
     const errors: Record<string, string> = {};
+    
+    if (!formData.schoolName.trim()) errors.schoolName = 'School name is required';
+    if (!formData.grade) errors.grade = 'Grade is required';
+    if (!formData.previousExperience.trim()) errors.previousExperience = 'Previous experience is required';
     
     if (formData.committeePreference.length === 0) errors.committeePreference = 'Please select at least one committee';
 
@@ -79,6 +87,38 @@ export const DelegateApplicationForm: React.FC = () => {
       onSubmit={handleSubmit} 
       applicationType="Delegate"
     >
+      <FormInput
+        label="School Name"
+        name="schoolName"
+        type="text"
+        value={formData.schoolName}
+        onChange={handleInputChange}
+        error={formErrors.schoolName}
+        required
+      />
+
+      <FormInput
+        label="Grade"
+        name="grade"
+        as="select"
+        value={formData.grade}
+        onChange={handleInputChange}
+        error={formErrors.grade}
+        options={['Prep.', '9th', '10th', '11th', '12th', 'Other']}
+        required
+      />
+
+      <FormInput
+        label="Previous MUN Experience"
+        name="previousExperience"
+        as="textarea"
+        value={formData.previousExperience}
+        onChange={handleInputChange}
+        error={formErrors.previousExperience}
+        rows={4}
+        required
+      />
+
       <div className="mb-2 flex justify-end">
         <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
           Characters: {motivationLetterLength} / 150 (minimum)
@@ -121,8 +161,6 @@ export const DelegateApplicationForm: React.FC = () => {
           <p className="mt-1 text-sm text-red-600">{formErrors.committeePreference}</p>
         )}
       </div>
-
-      {}
       
     </BaseApplicationForm>
   );

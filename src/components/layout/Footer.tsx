@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
             <p className="text-gray-400">
               Email: aalmun@gmail.com
               <br />
-              Phone: (530) 823 73 05
+              Phone: +90 (506) 399 27 71 
             </p>
           </div>
         </div>

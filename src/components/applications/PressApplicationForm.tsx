@@ -68,7 +68,6 @@ export const PressApplicationForm: React.FC = () => {
         required
       />
 
-      {}
       <FormInput
         label="Equipment You'll Bring"
         name="equipment"
@@ -81,8 +80,6 @@ export const PressApplicationForm: React.FC = () => {
         required
       />
 
-      {}
-      
     </BaseApplicationForm>
   );
 };

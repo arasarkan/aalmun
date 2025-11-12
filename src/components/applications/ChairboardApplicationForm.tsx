@@ -136,7 +136,6 @@ export const ChairboardApplicationForm: React.FC = () => {
         )}
       </div>
 
-      {}
       <FormInput
         label="Halfway through the committee chair-board realize that delegates do not properly understand committee procedure. The committee is not moving forward. So what can be done to move the committee forward?"
         name="procedureHandling" 
