@@ -11,6 +11,8 @@ interface FormInputProps {
   options?: string[];
   as?: 'input' | 'textarea' | 'select';
   rows?: number;
+  // 1. ADD THIS LINE to allow any other prop (like placeholder)
+  [key: string]: any;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -24,6 +26,8 @@ const FormInput: React.FC<FormInputProps> = ({
   options,
   as = 'input',
   rows = 3,
+  // 2. ADD "...rest" to collect all other props
+  ...rest
 }) => {
   const inputClasses = `w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
     error ? 'border-red-500' : ''
@@ -43,6 +47,8 @@ const FormInput: React.FC<FormInputProps> = ({
           onChange={onChange}
           required={required}
           className={inputClasses}
+          // 3. SPREAD the rest props onto the element
+          {...rest}
         />
       )}
       {as === 'textarea' && (
@@ -54,6 +60,8 @@ const FormInput: React.FC<FormInputProps> = ({
           required={required}
           rows={rows}
           className={inputClasses}
+          // 3. SPREAD the rest props onto the element
+          {...rest}
         />
       )}
       {as === 'select' && (
@@ -64,6 +72,8 @@ const FormInput: React.FC<FormInputProps> = ({
           onChange={onChange}
           required={required}
           className={inputClasses}
+          // 3. SPREAD the rest props onto the element
+          {...rest}
         >
           <option value="">Select an option</option>
           {options?.map((option) => (

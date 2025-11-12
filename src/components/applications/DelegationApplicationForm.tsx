@@ -12,7 +12,6 @@ export const DelegationApplicationForm: React.FC = () => {
     headDelegateName: '',
     headDelegateEmail: '',
     headDelegatePhone: '',
-    previousMUN: '',
     committeePreferences: [] as string[],
     specialRequests: '',
   });
@@ -20,12 +19,13 @@ export const DelegationApplicationForm: React.FC = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const committeeOptions = [
-    'United Nations Security Council (UNSC)',
-    'United Nations Human Rights Council (UNHRC)',
-    'United Nations Environment Programme (UNEP)',
-    'World Health Organization (WHO)',
-    'United Nations Children\'s Fund (UNICEF)',
-    'United Nations Office on Drugs and Crime (UNODC)',
+    'Council of the European Union (CEU)',
+    'World Organization for Animal Health (WOAH)',
+    'Disarmament and International Security Committee (DISEC)',
+    'Joint Crisis Committee (JCC)',
+    'Crisis Committee (CC)',
+    'International Olympic Committee (IOC)',
+    'United States Customs Court (USCC)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -39,7 +39,6 @@ export const DelegationApplicationForm: React.FC = () => {
 
   const handleCommitteeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-
     if (checked) {
       setFormData(prev => ({
         ...prev,
@@ -54,7 +53,6 @@ export const DelegationApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-    // Validate delegation-specific fields
     const errors: Record<string, string> = {};
     
     if (!formData.institution.trim()) errors.institution = 'Institution is required';
@@ -62,7 +60,7 @@ export const DelegationApplicationForm: React.FC = () => {
     if (!formData.headDelegateName.trim()) errors.headDelegateName = 'Head delegate name is required';
     if (!formData.headDelegateEmail.trim()) errors.headDelegateEmail = 'Head delegate email is required';
     if (!formData.headDelegatePhone.trim()) errors.headDelegatePhone = 'Head delegate phone is required';
-    if (!formData.previousMUN.trim()) errors.previousMUN = 'Previous MUN experience is required';
+    
     if (formData.committeePreferences.length === 0) errors.committeePreferences = 'Please select at least one committee preference';
 
     if (Object.keys(errors).length > 0) {
@@ -70,7 +68,6 @@ export const DelegationApplicationForm: React.FC = () => {
       return false;
     }
 
-    // Submit with combined data
     return await submitApplication({
       ...baseData,
       ...formData
@@ -135,16 +132,8 @@ export const DelegationApplicationForm: React.FC = () => {
         required
       />
 
-      <FormInput
-        label="Previous MUN Experience"
-        name="previousMUN"
-        as="textarea"
-        value={formData.previousMUN}
-        onChange={handleInputChange}
-        error={formErrors.previousMUN}
-        rows={4}
-        required
-      />
+      {}
+      {}
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">

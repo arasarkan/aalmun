@@ -7,11 +7,7 @@ export const AdminApplicationForm: React.FC = () => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
-    organization: '',
-    position: '',
-    experience: '',
-    skills: '',
-    availability: '',
+    motivationLetter: '',
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -26,82 +22,50 @@ export const AdminApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-    // Validate admin-specific fields
+  
     const errors: Record<string, string> = {};
     
-    if (!formData.organization.trim()) errors.organization = 'Organization is required';
-    if (!formData.position.trim()) errors.position = 'Position is required';
-    if (!formData.experience.trim()) errors.experience = 'Experience is required';
-    if (!formData.skills.trim()) errors.skills = 'Skills are required';
-    if (!formData.availability.trim()) errors.availability = 'Availability is required';
+    if (!formData.motivationLetter.trim()) {
+      errors.motivationLetter = 'Motivation letter is required';
+    } else if (formData.motivationLetter.length < 150) {
+      errors.motivationLetter = 'Motivation letter must be at least 150 characters long.';
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      return false;
+      return false; 
     }
 
-    // Submit with combined data
-    return await submitApplication({
+    const finalData = {
       ...baseData,
       ...formData
-    });
+    };
+
+    return await submitApplication(finalData);
   };
+
+  const motivationLetterLength = formData.motivationLetter.length;
 
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Admin"
+      applicationType="Delegate"
     >
-      <FormInput
-        label="Organization"
-        name="organization"
-        type="text"
-        value={formData.organization}
-        onChange={handleInputChange}
-        error={formErrors.organization}
-        required
-      />
+      {}
+      <div className="mb-2 flex justify-end">
+        <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
+          Characters: {motivationLetterLength} / 150 (minimum)
+        </p>
+      </div>
 
       <FormInput
-        label="Current Position"
-        name="position"
-        type="text"
-        value={formData.position}
-        onChange={handleInputChange}
-        error={formErrors.position}
-        required
-      />
-
-      <FormInput
-        label="Relevant Experience"
-        name="experience"
+        label="Motivation Letter"
+        name="motivationLetter"
         as="textarea"
-        value={formData.experience}
+        value={formData.motivationLetter}
         onChange={handleInputChange}
-        error={formErrors.experience}
-        rows={4}
-        required
-      />
-
-      <FormInput
-        label="Relevant Skills"
-        name="skills"
-        as="textarea"
-        value={formData.skills}
-        onChange={handleInputChange}
-        error={formErrors.skills}
-        rows={4}
-        required
-      />
-
-      <FormInput
-        label="Availability During Conference"
-        name="availability"
-        as="textarea"
-        value={formData.availability}
-        onChange={handleInputChange}
-        error={formErrors.availability}
-        rows={3}
+        error={formErrors.motivationLetter}
+        rows={6}
         required
       />
     </BaseApplicationForm>

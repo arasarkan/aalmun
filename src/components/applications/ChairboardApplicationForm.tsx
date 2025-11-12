@@ -7,14 +7,13 @@ export const ChairboardApplicationForm: React.FC = () => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
-    institution: '',
-    position: '',
     experience: '',
     committeePreferences: [] as string[],
-    chairingExperience: '',
-    crisisExperience: '',
-    availability: '',
-    resume: '',
+    motivationLetter: '',
+    procedureHandling: '',      
+    delegateEngagement: '',    
+    crisisUpdateResponse: '',    
+    crisisDirective: '',         
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -54,52 +53,49 @@ export const ChairboardApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-    // Validate chairboard-specific fields
     const errors: Record<string, string> = {};
     
-    if (!formData.institution.trim()) errors.institution = 'Institution is required';
-    if (!formData.position.trim()) errors.position = 'Position is required';
     if (!formData.experience.trim()) errors.experience = 'Experience is required';
     if (formData.committeePreferences.length === 0) errors.committeePreferences = 'Please select at least one committee preference';
-    if (!formData.chairingExperience.trim()) errors.chairingExperience = 'Chairing experience is required';
-    if (!formData.crisisExperience.trim()) errors.crisisExperience = 'Crisis experience is required';
-    if (!formData.availability.trim()) errors.availability = 'Availability is required';
-    if (!formData.resume.trim()) errors.resume = 'Resume link is required';
+
+    if (!formData.motivationLetter.trim()) {
+      errors.motivationLetter = 'Motivation letter is required';
+    } else if (formData.motivationLetter.length < 150) {
+      errors.motivationLetter = 'Motivation letter must be at least 150 characters long.';
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return false;
     }
 
-    // Submit with combined data
     return await submitApplication({
       ...baseData,
       ...formData
     });
   };
 
+  const motivationLetterLength = formData.motivationLetter.length;
+
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
       applicationType="Chairboard"
     >
-      <FormInput
-        label="Institution"
-        name="institution"
-        type="text"
-        value={formData.institution}
-        onChange={handleInputChange}
-        error={formErrors.institution}
-        required
-      />
+      <div className="mb-2 flex justify-end">
+        <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
+          Characters: {motivationLetterLength} / 150 (minimum)
+        </p>
+      </div>
 
       <FormInput
-        label="Current Position"
-        name="position"
-        type="text"
-        value={formData.position}
+        label="Motivation Letter"
+        name="motivationLetter"
+        as="textarea"
+        value={formData.motivationLetter}
         onChange={handleInputChange}
-        error={formErrors.position}
+        error={formErrors.motivationLetter}
+        rows={6}
         required
       />
 
@@ -140,47 +136,41 @@ export const ChairboardApplicationForm: React.FC = () => {
         )}
       </div>
 
+      {}
       <FormInput
-        label="Chairing Experience"
-        name="chairingExperience"
+        label="Halfway through the committee chair-board realize that delegates do not properly understand committee procedure. The committee is not moving forward. So what can be done to move the committee forward?"
+        name="procedureHandling" 
         as="textarea"
-        value={formData.chairingExperience}
+        value={formData.procedureHandling} 
         onChange={handleInputChange}
-        error={formErrors.chairingExperience}
-        rows={4}
-        required
-      />
-
-      <FormInput
-        label="Crisis Committee Experience"
-        name="crisisExperience"
-        as="textarea"
-        value={formData.crisisExperience}
-        onChange={handleInputChange}
-        error={formErrors.crisisExperience}
-        rows={4}
-        required
-      />
-
-      <FormInput
-        label="Availability During Conference"
-        name="availability"
-        as="textarea"
-        value={formData.availability}
-        onChange={handleInputChange}
-        error={formErrors.availability}
         rows={3}
-        required
       />
 
       <FormInput
-        label="Resume/CV Link"
-        name="resume"
-        type="url"
-        value={formData.resume}
+        label="How would you ensure that delegates, especially first-timers, feel comfortable and engaged in committee sessions?"
+        name="delegateEngagement" 
+        as="textarea"
+        value={formData.delegateEngagement} 
         onChange={handleInputChange}
-        error={formErrors.resume}
-        required
+        rows={3}
+      />
+
+      <FormInput
+        label="How would you respond if an update took longer than expected?"
+        name="crisisUpdateResponse"
+        as="textarea"
+        value={formData.crisisUpdateResponse} 
+        onChange={handleInputChange}
+        rows={3}
+      />
+
+      <FormInput
+        label="Write a simple directive: You are Sultan Murad I, ruler of Ottoman Empire. It is the time of the Battle of Maritsa, where 15,000 Ottoman soldiers are preparing to face 50,000 Bulgarian soldiers."
+        name="crisisDirective" 
+        as="textarea"
+        value={formData.crisisDirective}
+        onChange={handleInputChange}
+        rows={3}
       />
     </BaseApplicationForm>
   );

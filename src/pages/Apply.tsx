@@ -1,5 +1,3 @@
-// src/pages/Apply.tsx
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -8,8 +6,6 @@ import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
 import ApplicationForm from '../components/ApplicationForm';
 import Button from '../components/UI/Button';
-
-// --- Extracted Sub-components for better organization ---
 
 interface LoadingViewProps {}
 const LoadingView: React.FC<LoadingViewProps> = () => (
@@ -45,7 +41,7 @@ const UnauthenticatedView: React.FC<UnauthenticatedViewProps> = ({ showLogin, on
   <div className="min-h-screen bg-gray-50 py-12">
     <div className="container mx-auto px-4">
       <header>
-        <h1 className="text-4xl font-bold mb-8 text-center">Apply to MUN Conference 2023</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center">Apply to AALMUN'26</h1>
       </header>
       <main>
         <div className="max-w-md mx-auto">
@@ -88,7 +84,7 @@ const NoApplicationView: React.FC = () => (
   <div className="min-h-screen bg-gray-50 py-12">
     <div className="container mx-auto px-4">
       <header>
-        <h1 className="text-4xl font-bold mb-8 text-center">Apply to MUN Conference 2023</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center">Apply to AALMUN'26</h1>
       </header>
       <main>
         <ApplicationForm />

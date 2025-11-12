@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { validateApplicationForm } from '../../utils/validation';
 import Button from '../UI/Button';
 import FormInput from '../UI/FormInput';
 
@@ -9,27 +8,32 @@ interface BaseFormData {
   lastName: string;
   email: string;
   phone: string;
+  schoolName: string;
+  grade: string;
+  previousExperience: string;
 }
 
 interface BaseApplicationFormProps {
   onSubmit: (data: any) => Promise<boolean>;
   applicationType: string;
   children: React.ReactNode;
-  additionalFields?: React.ReactNode;
 }
 
 export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
   onSubmit,
   applicationType,
   children,
-  additionalFields
 }) => {
   const { user } = useAuth();
+  
   const [formData, setFormData] = useState<BaseFormData>({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    schoolName: '',
+    grade: '',
+    previousExperience: '',
   });
   
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -41,7 +45,6 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
-    // Clear error for this field when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -52,13 +55,15 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
     setLoading(true);
     setError(null);
 
-    // Basic validation
     const errors: Record<string, string> = {};
     
     if (!formData.firstName.trim()) errors.firstName = 'First name is required';
     if (!formData.lastName.trim()) errors.lastName = 'Last name is required';
     if (!formData.email.trim()) errors.email = 'Email is required';
     if (!formData.phone.trim()) errors.phone = 'Phone number is required';
+    if (!formData.schoolName.trim()) errors.schoolName = 'School name is required';
+    if (!formData.grade.trim()) errors.grade = 'Grade is required';
+    if (!formData.previousExperience.trim()) errors.previousExperience = 'Previous experience is required';
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -66,7 +71,6 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
       return;
     }
 
-    // Submit application with type
     const applicationData = {
       ...formData,
       applicationType
@@ -157,8 +161,42 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
           required
         />
 
+        {}
+        <FormInput
+          label="School Name"
+          name="schoolName"
+          type="text"
+          value={formData.schoolName}
+          onChange={handleInputChange}
+          error={formErrors.schoolName}
+          required
+        />
+
+        <FormInput
+          label="Grade"
+          name="grade"
+          as="select"
+          value={formData.grade}
+          onChange={handleInputChange}
+          error={formErrors.grade}
+          options={['Prep.','9th', '10th', '11th', '12th','Other']}
+          required
+        />
+
+        <FormInput
+          label="Previous MUN or Relevant Experience"
+          name="previousExperience"
+          as="textarea"
+          value={formData.previousExperience}
+          onChange={handleInputChange}
+          error={formErrors.previousExperience}
+          rows={4}
+          placeholder="Please describe any past Model United Nations conferences or other relevant experiences."
+          required
+        />
+        
+        {}
         {children}
-        {additionalFields}
 
         <Button
           type="submit"

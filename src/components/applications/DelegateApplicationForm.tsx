@@ -7,41 +7,20 @@ export const DelegateApplicationForm: React.FC = () => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
-    school: '',
-    grade: '',
-    experience: '',
     committeePreference: [] as string[],
-    positionPreference: '',
+    motivationLetter: '',
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const committeeOptions = [
-    'United Nations Security Council (UNSC)',
-    'United Nations Human Rights Council (UNHRC)',
-    'United Nations Environment Programme (UNEP)',
-    'World Health Organization (WHO)',
-    'United Nations Children\'s Fund (UNICEF)',
-    'United Nations Office on Drugs and Crime (UNODC)',
-  ];
-
-  const positionOptions = [
-    'Ambassador',
-    'Co-Ambassador',
-    'Staff',
-    'No Preference',
-  ];
-
-  const gradeOptions = [
-    '9th Grade',
-    '10th Grade',
-    '11th Grade',
-    '12th Grade',
-    'University Freshman',
-    'University Sophomore',
-    'University Junior',
-    'University Senior',
-    'Graduate Student',
+    'Council of the European Union (CEU)',
+    'World Organization for Animal Health (WOAH)',
+    'Disarmament and International Security Committee (DISEC)',
+    'Joint Crisis Committee (JCC)',
+    'Crisis Committee (CC)',
+    'International Olympic Committee (IOC)',
+    'United States Customs Court (USCC)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -72,61 +51,48 @@ export const DelegateApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-    // Validate delegate-specific fields
     const errors: Record<string, string> = {};
     
-    if (!formData.school.trim()) errors.school = 'School is required';
-    if (!formData.grade) errors.grade = 'Grade is required';
-    if (!formData.experience.trim()) errors.experience = 'Experience is required';
     if (formData.committeePreference.length === 0) errors.committeePreference = 'Please select at least one committee';
-    if (!formData.positionPreference) errors.positionPreference = 'Position preference is required';
+
+    if (!formData.motivationLetter.trim()) {
+      errors.motivationLetter = 'Motivation letter is required';
+    } else if (formData.motivationLetter.length < 150) {
+      errors.motivationLetter = 'Motivation letter must be at least 150 characters long.';
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return false;
     }
 
-    // Submit with combined data
     return await submitApplication({
       ...baseData,
       ...formData
     });
   };
 
+  const motivationLetterLength = formData.motivationLetter.length;
+
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
       applicationType="Delegate"
     >
-      <FormInput
-        label="School"
-        name="school"
-        type="text"
-        value={formData.school}
-        onChange={handleInputChange}
-        error={formErrors.school}
-        required
-      />
+      <div className="mb-2 flex justify-end">
+        <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
+          Characters: {motivationLetterLength} / 150 (minimum)
+        </p>
+      </div>
 
       <FormInput
-        label="Grade"
-        name="grade"
-        as="select"
-        value={formData.grade}
-        onChange={handleInputChange}
-        error={formErrors.grade}
-        options={gradeOptions}
-        required
-      />
-
-      <FormInput
-        label="Previous MUN Experience"
-        name="experience"
+        label="Motivation Letter"
+        name="motivationLetter"
         as="textarea"
-        value={formData.experience}
+        value={formData.motivationLetter}
         onChange={handleInputChange}
-        error={formErrors.experience}
-        rows={4}
+        error={formErrors.motivationLetter}
+        rows={6}
         required
       />
 
@@ -156,16 +122,8 @@ export const DelegateApplicationForm: React.FC = () => {
         )}
       </div>
 
-      <FormInput
-        label="Position Preference"
-        name="positionPreference"
-        as="select"
-        value={formData.positionPreference}
-        onChange={handleInputChange}
-        error={formErrors.positionPreference}
-        options={positionOptions}
-        required
-      />
+      {}
+      
     </BaseApplicationForm>
   );
 };
