@@ -53,7 +53,6 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium mb-2">Academic Information</h3>
-                    <p><strong>School:</strong> {application.school}</p>
                     <p><strong>Grade:</strong> {application.grade}</p>
                     <p><strong>Submitted:</strong> {formatDate(application.submittedAt)}</p>
                   </div>
@@ -73,10 +72,6 @@ const Dashboard: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium mb-2">Position Preference</h3>
-                  <p>{application.positionPreference}</p>
-                </div>
               </div>
               
               <div className="bg-blue-50 p-6 rounded-lg">
