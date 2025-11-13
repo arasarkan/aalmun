@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApplication } from '../hooks/useApplication';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
@@ -189,7 +190,7 @@ const Dashboard: React.FC = () => {
               
               <div className="mt-6 text-center">
                 <Button variant="secondary">
-                  <a href="/apply">Submit Another Application</a>
+                  <Link to="/apply" className="inline-block">Submit Another Application</Link>
                 </Button>
               </div>
             </div>

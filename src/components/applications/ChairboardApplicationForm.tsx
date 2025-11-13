@@ -23,12 +23,13 @@ export const ChairboardApplicationForm: React.FC<ChairboardApplicationFormProps>
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const committeeOptions = [
-    'United Nations Security Council (UNSC)',
-    'United Nations Human Rights Council (UNHRC)',
-    'United Nations Environment Programme (UNEP)',
-    'World Health Organization (WHO)',
-    'United Nations Children\'s Fund (UNICEF)',
-    'United Nations Office on Drugs and Crime (UNODC)',
+    'Council of the European Union (CEU)',
+    'World Organization for Animal Health (WOAH)',
+    'Disarmament and International Security Committee (DISEC)',
+    'Joint Crisis Committee (JCC)',
+    'Crisis Committee (CC)',
+    'International Olympic Committee (IOC)',
+    'United States Supreme Court (USSC)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
