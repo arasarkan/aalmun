@@ -3,7 +3,11 @@ import { useApplication } from '../../hooks/useApplication';
 import { BaseApplicationForm } from './BaseApplicationForm';
 import FormInput from '../UI/FormInput';
 
-export const AdminApplicationForm: React.FC = () => {
+interface AdminApplicationFormProps {
+  applicationType: string;
+}
+
+export const AdminApplicationForm: React.FC<AdminApplicationFormProps> = ({ applicationType }) => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
@@ -35,12 +39,13 @@ export const AdminApplicationForm: React.FC = () => {
       return false; 
     }
 
-    const finalData = {
+    const applicationData = {
       ...baseData,
-      ...formData
+      ...formData,
+      type: applicationType
     };
 
-    return await submitApplication(finalData);
+    return await submitApplication(applicationData);
   };
 
   const motivationLetterLength = formData.motivationLetter.length;
@@ -48,10 +53,8 @@ export const AdminApplicationForm: React.FC = () => {
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Admin"
+      applicationType={applicationType}
     >
-      {/* REMOVED the empty curly brace */}
-      
       <div className="mb-2 flex justify-end">
         <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
           Characters: {motivationLetterLength} / 150 (minimum)

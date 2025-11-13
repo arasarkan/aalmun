@@ -6,11 +6,17 @@ import { AdminApplicationForm } from './AdminApplicationForm';
 import { PressApplicationForm } from './PressApplicationForm';
 import { ChairboardApplicationForm } from './ChairboardApplicationForm';
 import Button from '../UI/Button';
+import { useApplication } from '../../hooks/useApplication';
 
 export const ApplicationContainer: React.FC = () => {
   const [applicationType, setApplicationType] = useState<string | null>(null);
+  const { hasAppliedForType, loading } = useApplication();
 
   const handleSelectApplicationType = (type: string) => {
+    if (hasAppliedForType(type)) {
+      alert(`You have already submitted a ${type} application. You can only submit one application per type.`);
+      return;
+    }
     setApplicationType(type);
   };
 
@@ -21,19 +27,23 @@ export const ApplicationContainer: React.FC = () => {
   const renderApplicationForm = () => {
     switch (applicationType) {
       case 'delegate':
-        return <DelegateApplicationForm />;
+        return <DelegateApplicationForm applicationType={applicationType} />;
       case 'delegation':
-        return <DelegationApplicationForm />;
+        return <DelegationApplicationForm applicationType={applicationType} />;
       case 'admin':
-        return <AdminApplicationForm />;
+        return <AdminApplicationForm applicationType={applicationType} />;
       case 'press':
-        return <PressApplicationForm />;
+        return <PressApplicationForm applicationType={applicationType} />;
       case 'chairboard':
-        return <ChairboardApplicationForm />;
+        return <ChairboardApplicationForm applicationType={applicationType} />;
       default:
         return null;
     }
   };
+
+  if (loading) {
+    return <div className="py-8 px-4 text-center">Loading...</div>;
+  }
 
   return (
     <div className="py-8 px-4">
@@ -47,8 +57,10 @@ export const ApplicationContainer: React.FC = () => {
           {renderApplicationForm()}
         </div>
       ) : (
-        <ApplicationTypeSelector onSelect={handleSelectApplicationType} />
+        <ApplicationTypeSelector onSelect={handleSelectApplicationType} hasAppliedForType={hasAppliedForType} />
       )}
     </div>
   );
 };
+
+export default ApplicationContainer; 

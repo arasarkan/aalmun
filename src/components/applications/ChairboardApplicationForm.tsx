@@ -3,7 +3,11 @@ import { useApplication } from '../../hooks/useApplication';
 import { BaseApplicationForm } from './BaseApplicationForm';
 import FormInput from '../UI/FormInput';
 
-export const ChairboardApplicationForm: React.FC = () => {
+interface ChairboardApplicationFormProps {
+  applicationType: string;
+}
+
+export const ChairboardApplicationForm: React.FC<ChairboardApplicationFormProps> = ({ applicationType }) => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
@@ -69,10 +73,13 @@ export const ChairboardApplicationForm: React.FC = () => {
       return false;
     }
 
-    return await submitApplication({
+    const applicationData = {
       ...baseData,
-      ...formData
-    });
+      ...formData,
+      type: applicationType
+    };
+
+    return await submitApplication(applicationData);
   };
 
   const motivationLetterLength = formData.motivationLetter.length;
@@ -80,7 +87,7 @@ export const ChairboardApplicationForm: React.FC = () => {
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Chairboard"
+      applicationType={applicationType}
     >
       <div className="mb-2 flex justify-end">
         <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>

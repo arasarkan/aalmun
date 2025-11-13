@@ -3,7 +3,11 @@ import { useApplication } from '../../hooks/useApplication';
 import { BaseApplicationForm } from './BaseApplicationForm';
 import FormInput from '../UI/FormInput';
 
-export const PressApplicationForm: React.FC = () => {
+interface PressApplicationFormProps {
+  applicationType: string;
+}
+
+export const PressApplicationForm: React.FC<PressApplicationFormProps> = ({ applicationType }) => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
@@ -38,10 +42,13 @@ export const PressApplicationForm: React.FC = () => {
       return false;
     }
 
-    return await submitApplication({
+    const applicationData = {
       ...baseData,
-      ...formData
-    });
+      ...formData,
+      type: applicationType
+    };
+
+    return await submitApplication(applicationData);
   };
 
   const motivationLetterLength = formData.motivationLetter.length;
@@ -49,7 +56,7 @@ export const PressApplicationForm: React.FC = () => {
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Press"
+      applicationType={applicationType}
     >
       <div className="mb-2 flex justify-end">
         <p className={`text-sm ${motivationLetterLength < 150 ? 'text-red-500' : 'text-green-600'}`}>
@@ -79,7 +86,6 @@ export const PressApplicationForm: React.FC = () => {
         placeholder="e.g., DSLR camera, audio recorder, laptop, etc."
         required
       />
-
     </BaseApplicationForm>
   );
 };

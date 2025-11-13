@@ -3,9 +3,13 @@ import Button from '../UI/Button';
 
 interface ApplicationTypeSelectorProps {
   onSelect: (type: string) => void;
+  hasAppliedForType: (type: string) => boolean;
 }
 
-export const ApplicationTypeSelector: React.FC<ApplicationTypeSelectorProps> = ({ onSelect }) => {
+export const ApplicationTypeSelector: React.FC<ApplicationTypeSelectorProps> = ({ 
+  onSelect, 
+  hasAppliedForType 
+}) => {
   const applicationTypes = [
     {
       id: 'delegate',
@@ -65,24 +69,38 @@ export const ApplicationTypeSelector: React.FC<ApplicationTypeSelectorProps> = (
       <p className="text-center text-gray-600 mb-8">Select the type of application you wish to submit</p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {applicationTypes.map((type) => (
-          <div key={type.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                {type.icon}
+        {applicationTypes.map((type) => {
+          const hasApplied = hasAppliedForType(type.id);
+          return (
+            <div 
+              key={type.id} 
+              className={`bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1 ${
+                hasApplied ? 'opacity-75' : ''
+              }`}
+            >
+              <div className="p-6">
+                <div className="flex items-center mb-4">
+                  {type.icon}
+                  {hasApplied && (
+                    <span className="ml-auto bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                      Applied
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{type.title}</h3>
+                <p className="text-gray-600 mb-4">{type.description}</p>
+                <Button 
+                  variant={hasApplied ? "secondary" : "primary"} 
+                  className="w-full"
+                  onClick={() => onSelect(type.id)}
+                  disabled={hasApplied}
+                >
+                  {hasApplied ? 'Already Applied' : 'Apply Now'}
+                </Button>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{type.title}</h3>
-              <p className="text-gray-600 mb-4">{type.description}</p>
-              <Button 
-                variant="primary" 
-                className="w-full"
-                onClick={() => onSelect(type.id)}
-              >
-                Apply Now
-              </Button>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApplication } from '../hooks/useApplication';
+import { ApplicationContainer } from '../components/applications/ApplicationContainer';
 import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
-import ApplicationForm from '../components/ApplicationForm';
 import Button from '../components/UI/Button';
 
 interface LoadingViewProps {}
@@ -56,30 +56,6 @@ const UnauthenticatedView: React.FC<UnauthenticatedViewProps> = ({ showLogin, on
   </div>
 );
 
-const ApplicationSubmittedView: React.FC = () => (
-  <div className="min-h-screen bg-gray-50 py-12">
-    <div className="container mx-auto px-4">
-      <main>
-        <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold mb-6 text-center">Application Submitted</h1>
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="status">
-            <p className="font-medium">Thank you for your application!</p>
-            <p>Your application has been successfully submitted. You can view your application details in your dashboard.</p>
-          </div>
-          <div className="text-center">
-            <Button variant="primary" className="mr-4">
-              <Link to="/dashboard">View Dashboard</Link>
-            </Button>
-            <Button variant="outline">
-              <Link to="/">Return Home</Link>
-            </Button>
-          </div>
-        </div>
-      </main>
-    </div>
-  </div>
-);
-
 const NoApplicationView: React.FC = () => (
   <div className="min-h-screen bg-gray-50 py-12">
     <div className="container mx-auto px-4">
@@ -87,12 +63,11 @@ const NoApplicationView: React.FC = () => (
         <h1 className="text-4xl font-bold mb-8 text-center">Apply to AALMUN'26</h1>
       </header>
       <main>
-        <ApplicationForm />
+        <ApplicationContainer />
       </main>
     </div>
   </div>
 );
-
 
 // --- Main Apply Component ---
 
@@ -100,7 +75,7 @@ interface ApplyProps {}
 
 const Apply: React.FC<ApplyProps> = () => {
   const { user } = useAuth();
-  const { application, loading, error } = useApplication();
+  const { applications, loading, error } = useApplication();
   const [showLogin, setShowLogin] = useState(true);
 
   if (loading) {
@@ -120,10 +95,8 @@ const Apply: React.FC<ApplyProps> = () => {
     );
   }
 
-  if (application) {
-    return <ApplicationSubmittedView />;
-  }
-
+  // Always show the application container for authenticated users
+  // The ApplicationContainer component will handle showing which types are already applied
   return <NoApplicationView />;
 };
 

@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import Button from '../UI/Button';
-import FormInput from '../UI/FormInput';
-
-interface BaseFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-}
 
 interface BaseApplicationFormProps {
   onSubmit: (data: any) => Promise<boolean>;
@@ -15,152 +8,182 @@ interface BaseApplicationFormProps {
   children: React.ReactNode;
 }
 
-export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
-  onSubmit,
+export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({ 
+  onSubmit, 
   applicationType,
-  children,
+  children 
 }) => {
-  // const { user } = useAuth();
-  
-  const [formData, setFormData] = useState<BaseFormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-  });
-  
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // State to collect all form data including base fields
+  const [formData, setFormData] = useState({
+    firstName: user?.displayName?.split(' ')[0] || '',
+    lastName: user?.displayName?.split(' ').slice(1).join(' ') || '',
+    phone: '',
+    idNumber: '',
+    specialConditions: '',
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-
-    if (formErrors[name]) {
-      setFormErrors(prev => ({ ...prev, [name]: '' }));
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
     setError(null);
 
-    const errors: Record<string, string> = {};
-    
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) errors.lastName = 'Last name is required';
-    if (!formData.email.trim()) errors.email = 'Email is required';
-    if (!formData.phone.trim()) errors.phone = 'Phone number is required';
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      setLoading(false);
-      return;
-    }
-
-    const applicationData = {
-      ...formData,
-      applicationType
+    const baseData = {
+      email: user?.email || '', 
+      uid: user?.uid || '',
+      ...formData, 
     };
 
-    const success = await onSubmit(applicationData);
+    console.log('BaseApplicationForm submitting with data:', baseData);
 
-    if (success) {
-      setSubmitSuccess(true);
-    } else {
-      setError('Failed to submit application. Please try again.');
+    try {
+      const success = await onSubmit(baseData);
+      if (success) {
+        window.location.href = '/apply';
+      } else {
+        setError('Failed to submit application');
+      }
+    } catch (err) {
+      setError('An error occurred while submitting your application');
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setLoading(false);
   };
 
-  if (submitSuccess) {
-    return (
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-          </div>
-          <h2 className="text-2xl font-semibold mb-4">Application Submitted Successfully!</h2>
-          <p className="mb-6">
-            Thank you for your {applicationType} application. Your application has been received and is currently under review.
-          </p>
-          <Button variant="primary">
-            <a href="/dashboard">View Your Dashboard</a>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6">{applicationType} Application Form</h2>
-
+    <div className="max-w-2xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">
+        {applicationType.charAt(0).toUpperCase() + applicationType.slice(1)} Application
+      </h2>
+      
       {error && (
-        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
       )}
-
+      
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInput
-            label="First Name"
-            name="firstName"
-            type="text"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            error={formErrors.firstName}
-            required
+        {/* Authenticated user's email (read-only) */}
+        <div className="mb-4">
+          <label htmlFor="userEmail" className="block text-gray-700 font-medium mb-2">
+            Your Email (Authenticated Account)
+          </label>
+          <input
+            type="email"
+            id="userEmail"
+            value={user?.email || ''}
+            readOnly
+            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
+            title="This email is locked to your authenticated account"
           />
+          <p className="text-sm text-gray-500 mt-1">This email is locked to your authenticated account</p>
+        </div>
 
-          <FormInput
-            label="Last Name"
-            name="lastName"
-            type="text"
-            value={formData.lastName}
+        {/* Name fields (pre-filled from Google account) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Phone number field */}
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
             onChange={handleInputChange}
-            error={formErrors.lastName}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="+1 (555) 123-4567"
             required
           />
         </div>
 
-        <FormInput
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          error={formErrors.email}
-          required
-        />
+        {/* ID Number field */}
+        <div className="mb-4">
+          <label htmlFor="idNumber" className="block text-gray-700 font-medium mb-2">
+            ID Number
+          </label>
+          <input
+            type="text"
+            id="idNumber"
+            name="idNumber"
+            value={formData.idNumber}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your ID number"
+            required
+          />
+          <p className="text-sm text-gray-500 mt-1">This information is required for conference registration and will be kept confidential.</p>
+        </div>
 
-        <FormInput
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          value={formData.phone}
-          onChange={handleInputChange}
-          error={formErrors.phone}
-          required
-        />
+        {/* Special Conditions field */}
+        <div className="mb-4">
+          <label htmlFor="specialConditions" className="block text-gray-700 font-medium mb-2">
+            Special Conditions or Accommodations
+          </label>
+          <textarea
+            id="specialConditions"
+            name="specialConditions"
+            rows={3}
+            value={formData.specialConditions}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Please let us know if you have any special conditions or require accommodations during the conference"
+          ></textarea>
+          <p className="text-sm text-gray-500 mt-1">Optional - Leave blank if not applicable</p>
+        </div>
         
         {children}
-
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={loading}
-          className="w-full mt-6"
-        >
-          {loading ? 'Submitting...' : 'Submit Application'}
-        </Button>
+        
+        <div className="mt-6">
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+            className="w-full"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
+          </Button>
+        </div>
       </form>
     </div>
   );

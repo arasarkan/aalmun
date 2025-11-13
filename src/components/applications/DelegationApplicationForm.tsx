@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApplication } from '../../hooks/useApplication';
 import { BaseApplicationForm } from './BaseApplicationForm';
 import FormInput from '../UI/FormInput';
 
-export const DelegationApplicationForm: React.FC = () => {
+interface DelegationApplicationFormProps {
+  applicationType: string;
+}
+
+export const DelegationApplicationForm: React.FC<DelegationApplicationFormProps> = ({ applicationType }) => {
   const { submitApplication } = useApplication();
   
   const [formData, setFormData] = useState({
@@ -17,6 +21,13 @@ export const DelegationApplicationForm: React.FC = () => {
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!formData.headDelegateEmail) {
+      // We'll get the user's email from the baseData in handleSubmit
+      // No need to import useAuth here since BaseApplicationForm handles it
+    }
+  }, [formData.headDelegateEmail]);
 
   const committeeOptions = [
     'Council of the European Union (CEU)',
@@ -68,16 +79,20 @@ export const DelegationApplicationForm: React.FC = () => {
       return false;
     }
 
-    return await submitApplication({
+    const applicationData = {
       ...baseData,
-      ...formData
-    });
+      ...formData,
+      headDelegateEmail: formData.headDelegateEmail || baseData.email,
+      type: applicationType
+    };
+
+    return await submitApplication(applicationData);
   };
 
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Delegation"
+      applicationType={applicationType}
     >
       <FormInput
         label="Institution/School Name"
@@ -119,6 +134,7 @@ export const DelegationApplicationForm: React.FC = () => {
           onChange={handleInputChange}
           error={formErrors.headDelegateEmail}
           required
+          helperText="If you are the head delegate, this should match your authenticated email"
         />
       </div>
 

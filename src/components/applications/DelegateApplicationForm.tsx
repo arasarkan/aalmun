@@ -3,7 +3,11 @@ import { useApplication } from '../../hooks/useApplication';
 import { BaseApplicationForm } from './BaseApplicationForm';
 import FormInput from '../UI/FormInput';
 
-export const DelegateApplicationForm: React.FC = () => {
+interface DelegateApplicationFormProps {
+  applicationType: string;
+}
+
+export const DelegateApplicationForm: React.FC<DelegateApplicationFormProps> = ({ applicationType }) => {
   const { submitApplication } = useApplication();
 
   const [formData, setFormData] = useState({
@@ -54,7 +58,6 @@ export const DelegateApplicationForm: React.FC = () => {
   };
 
   const handleSubmit = async (baseData: any) => {
-    // 2. ADDED BACK validation for the missing fields
     const errors: Record<string, string> = {};
     
     if (!formData.schoolName.trim()) errors.schoolName = 'School name is required';
@@ -74,10 +77,13 @@ export const DelegateApplicationForm: React.FC = () => {
       return false;
     }
 
-    return await submitApplication({
+    const applicationData = {
       ...baseData,
-      ...formData
-    });
+      ...formData,
+      type: applicationType
+    };
+
+    return await submitApplication(applicationData);
   };
 
   const motivationLetterLength = formData.motivationLetter.length;
@@ -85,7 +91,7 @@ export const DelegateApplicationForm: React.FC = () => {
   return (
     <BaseApplicationForm 
       onSubmit={handleSubmit} 
-      applicationType="Delegate"
+      applicationType={applicationType}
     >
       <FormInput
         label="School Name"
@@ -161,7 +167,6 @@ export const DelegateApplicationForm: React.FC = () => {
           <p className="mt-1 text-sm text-red-600">{formErrors.committeePreference}</p>
         )}
       </div>
-      
     </BaseApplicationForm>
   );
 };

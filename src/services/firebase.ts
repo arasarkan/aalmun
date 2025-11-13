@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 //import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
@@ -19,6 +19,14 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log('Auth persistence set to local');
+  })
+  .catch((error) => {
+    console.error('Failed to set auth persistence:', error);
+  });
 
 // Initialize Firestore
 export const db = getFirestore(app);
