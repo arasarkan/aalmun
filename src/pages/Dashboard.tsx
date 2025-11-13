@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
                   This typically takes 2-3 weeks after the application deadline.
                 </p>
                 <p>
-                  If you have any questions about your application, please contact us at aalmun26@mail.com.
+                  If you have any questions about your application, please contact us at aalmun26@gmail.com.
                 </p>
               </div>
               
