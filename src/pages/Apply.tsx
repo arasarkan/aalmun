@@ -1,5 +1,5 @@
+// src/pages/Apply.tsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApplication } from '../hooks/useApplication';
 import { ApplicationContainer } from '../components/applications/ApplicationContainer';
@@ -75,10 +75,10 @@ interface ApplyProps {}
 
 const Apply: React.FC<ApplyProps> = () => {
   const { user } = useAuth();
-  const { applications, loading, error } = useApplication();
+  const { loading: isAppLoading, error } = useApplication(); // Use isAppLoading instead of loading
   const [showLogin, setShowLogin] = useState(true);
 
-  if (loading) {
+  if (isAppLoading) { // Use the correct loading state
     return <LoadingView />;
   }
 
@@ -96,7 +96,6 @@ const Apply: React.FC<ApplyProps> = () => {
   }
 
   // Always show the application container for authenticated users
-  // The ApplicationContainer component will handle showing which types are already applied
   return <NoApplicationView />;
 };
 

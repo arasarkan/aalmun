@@ -1,3 +1,4 @@
+// src/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../services/firebase';
@@ -30,17 +31,8 @@ export const useAuth = () => {
       setLoading(false);
     });
 
-    const timeoutId = setTimeout(() => {
-      if (loading) {
-        console.log('Auth loading timeout, setting to false');
-        setLoading(false);
-      }
-    }, 5000); 
-
-    return () => {
-      unsubscribe();
-      clearTimeout(timeoutId);
-    };
+    // Cleanup subscription on unmount
+    return unsubscribe;
   }, []);
 
   return { user, loading };

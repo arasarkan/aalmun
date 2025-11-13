@@ -1,33 +1,36 @@
+// src/hooks/useApplication.ts
 import { useState, useEffect } from 'react';
 import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebase';
-import { useAuth } from './useAuth';
+import { useAuth } from './useAuth'; // Import the updated useAuth
 import { Application } from '../types';
 
 export const useApplication = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading } = useAuth(); // Use loading from useAuth instead of authLoading
   const [applications, setApplications] = useState<{ [key: string]: Application }>({});
-  const [loading, setLoading] = useState(true);
+  const [isAppLoading, setAppLoading] = useState(true); // Separate loading state for app operations
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (authLoading) {
+    // Don't fetch applications if auth is still loading
+    if (loading) {
       console.log('Auth still loading, skipping fetch');
-      setLoading(false);
+      setAppLoading(false);
       return;
     }
 
     const fetchApplications = async () => {
-
+      // Make sure user is authenticated before proceeding
       if (!user || !user.uid) {
         console.log('No user authenticated, skipping fetch');
-        setLoading(false);
+        setAppLoading(false);
         return;
       }
 
       console.log('Fetching applications for user:', user.uid);
 
       try {
+        // Query all applications for this user
         const q = query(collection(db, 'applications'), where('uid', '==', user.uid));
         const querySnapshot = await getDocs(q);
         
@@ -44,12 +47,12 @@ export const useApplication = () => {
         console.error('Error fetching applications:', err);
         setError('Failed to fetch applications: ' + (err as Error).message);
       } finally {
-        setLoading(false);
+        setAppLoading(false);
       }
     };
 
     fetchApplications();
-  }, [user, authLoading]);
+  }, [user, loading]); // Use loading from useAuth
 
   const submitApplication = async (data: Omit<Application, 'uid' | 'submittedAt'>) => {
     if (!user || !user.uid) {
@@ -58,11 +61,13 @@ export const useApplication = () => {
     }
 
     try {
+      // Check if user already submitted this type of application
       if (applications[data.type]) {
         setError(`You have already submitted a ${data.type} application`);
         return false;
       }
 
+      // Ensure we have a valid email
       const userEmail = user.email || '';
       if (!userEmail) {
         setError('Your account does not have a valid email address');
@@ -78,11 +83,13 @@ export const useApplication = () => {
 
       console.log('Submitting application:', applicationData);
 
+      // Create a new document with a unique ID
       const newDocRef = doc(collection(db, 'applications'));
       await setDoc(newDocRef, applicationData);
       
       console.log('Application submitted successfully');
       
+      // Update local state
       setApplications(prev => ({
         ...prev,
         [data.type]: applicationData
@@ -102,7 +109,7 @@ export const useApplication = () => {
 
   return { 
     applications, 
-    loading, 
+    loading: isAppLoading, // Use separate loading state for app operations
     error, 
     submitApplication,
     hasAppliedForType
