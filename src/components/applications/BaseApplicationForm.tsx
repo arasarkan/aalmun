@@ -158,7 +158,7 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
         {/* Special Conditions field */}
         <div className="mb-4">
           <label htmlFor="specialConditions" className="block text-gray-700 font-medium mb-2">
-            Special Conditions or Accommodations
+            Special Conditions
           </label>
           <textarea
             id="specialConditions"

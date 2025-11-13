@@ -111,7 +111,7 @@ export const DelegationApplicationForm: React.FC<DelegationApplicationFormProps>
         value={formData.delegationSize}
         onChange={handleInputChange}
         error={formErrors.delegationSize}
-        options={['5-10', '11-15', '16-20', '20+']}
+        options={['15-30', '30-45', '46-60', '60+']}
         required
       />
 
@@ -175,7 +175,7 @@ export const DelegationApplicationForm: React.FC<DelegationApplicationFormProps>
       </div>
 
       <FormInput
-        label="Special Requests or Accommodations"
+        label="Special Requests"
         name="specialRequests"
         as="textarea"
         value={formData.specialRequests}
