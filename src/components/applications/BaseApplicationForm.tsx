@@ -167,7 +167,7 @@ export const BaseApplicationForm: React.FC<BaseApplicationFormProps> = ({
             value={formData.specialConditions}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Please let us know if you have any special conditions or require accommodations during the conference"
+            placeholder="Please let us know if you have any special conditions during the conference"
           ></textarea>
           <p className="text-sm text-gray-500 mt-1">Optional - Leave blank if not applicable</p>
         </div>

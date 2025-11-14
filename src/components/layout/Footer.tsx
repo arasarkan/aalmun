@@ -25,6 +25,11 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
+                <a href="/team" className="hover:text-white">
+                  Team
+                </a>
+              </li>
+              <li>
                 <a href="/committees" className="hover:text-white">
                   Committees
                 </a>
@@ -39,9 +44,9 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact Us</h3>
             <p className="text-gray-400">
-              Email: aalmun@gmail.com
+              Email: aalmun26@gmail.com
               <br />
-              Phone: +90 (506) 399 27 71 
+              Phone: +90 (506) 399 27 71
             </p>
           </div>
         </div>
