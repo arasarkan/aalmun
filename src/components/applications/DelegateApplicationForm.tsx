@@ -27,7 +27,7 @@ export const DelegateApplicationForm: React.FC<DelegateApplicationFormProps> = (
     'Joint Crisis Committee (JCC)',
     'Crisis Committee (CC)',
     'International Olympic Committee (IOC)',
-    'United States Supreme Court (USSC)'
+    'International Court of Justice (ICJ)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

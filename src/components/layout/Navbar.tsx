@@ -27,9 +27,9 @@ const Navbar: React.FC = () => {
         <Link to="/" className="flex items-center z-10">
           {/* Logo ekliyoruz */}
           <img src={logo} alt="AALMUN'25 Logo" className="h-12 mr-2" />
-          <span className="text-xl font-bold">AALMUN'25</span>
+          <span className="text-xl font-bold">AALMUN'26</span>
         </Link>
-        
+
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">
           <Link
@@ -43,6 +43,12 @@ const Navbar: React.FC = () => {
             className={`hover:text-blue-200 ${isActive('/about') ? 'text-blue-200' : ''}`}
           >
             About
+          </Link>
+          <Link
+            to="/team"
+            className={`hover:text-blue-200 ${isActive('/team') ? 'text-blue-200' : ''}`}
+          >
+            Team
           </Link>
           <Link
             to="/committees"
@@ -65,7 +71,7 @@ const Navbar: React.FC = () => {
             </Link>
           )}
         </div>
-        
+
         {/* Desktop User Authentication */}
         <div className="hidden md:block">
           {user ? (
@@ -87,9 +93,9 @@ const Navbar: React.FC = () => {
             </Link>
           )}
         </div>
-        
+
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className="md:hidden z-10"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
@@ -102,7 +108,7 @@ const Navbar: React.FC = () => {
           </svg>
         </button>
       </div>
-      
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-[#7c1d36] absolute top-full left-0 right-0 shadow-lg z-20">
@@ -120,6 +126,12 @@ const Navbar: React.FC = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               About
+            </Link>
+            <Link
+              to="/team"
+              className={`hover:text-blue-200 ${isActive('/team') ? 'text-blue-200' : ''}`}
+            >
+              Team
             </Link>
             <Link
               to="/committees"
@@ -144,7 +156,7 @@ const Navbar: React.FC = () => {
                 Dashboard
               </Link>
             )}
-            
+
             {/* Mobile User Authentication */}
             <div className="border-t border-blue-500 pt-4">
               {user ? (

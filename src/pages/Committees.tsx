@@ -1,53 +1,63 @@
 import React, { useState } from 'react';
-import { Committee } from '../types';
+
+interface CommitteeWithAcas {
+  id: string;
+  name: string;
+  photoURL: string;
+}
 
 const Committees: React.FC = () => {
-  const [selectedCommittee, setSelectedCommittee] = useState<string | null>(null);
-
-  const committees: Committee[] = [
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const committees: CommitteeWithAcas[] = [
     {
       id: '1',
-      name: 'United Nations Security Council (UNSC)',
-      topic: 'Addressing the Crisis in the South China Sea',
-      description: 'The Security Council will address escalating tensions in the South China Sea, focusing on territorial disputes, freedom of navigation, and resource exploitation. Delegates will work toward a resolution that balances national interests with international law and regional stability.',
-      positions: ['United States', 'China', 'Russia', 'United Kingdom', 'France', 'India', 'Japan', 'Australia', 'Philippines', 'Vietnam', 'Malaysia', 'Indonesia']
+      name: 'Council of the European Union (CEU)',
+      photoURL: "./../assets/committees/ceu_acas.jpg"
     },
     {
       id: '2',
-      name: 'United Nations Human Rights Council (UNHRC)',
-      topic: 'Protecting Digital Rights in the Age of Surveillance',
-      description: 'This committee will examine the growing tension between national security measures and individual privacy rights in the digital realm. Delegates will address issues of government surveillance, data protection, and the right to information in an increasingly connected world.',
-      positions: ['United States', 'China', 'Russia', 'Germany', 'France', 'United Kingdom', 'Japan', 'India', 'Brazil', 'South Africa', 'Mexico', 'Indonesia']
+      name: 'World Organization for Animal Health (WOAH)',
+      photoURL: "./../assets/committees/woah_acas.jpg"
     },
     {
       id: '3',
-      name: 'United Nations Environment Programme (UNEP)',
-      topic: 'Combating Climate Change Through International Cooperation',
-      description: 'Delegates will address the urgent need for coordinated global action to combat climate change. The committee will focus on implementing the Paris Agreement, financing green transitions, and supporting vulnerable nations in adapting to environmental changes.',
-      positions: ['United States', 'China', 'India', 'European Union', 'Russia', 'Brazil', 'Indonesia', 'Japan', 'Canada', 'Australia', 'South Korea', 'Mexico']
+      name: 'Disarmament and International Security Committee (DISEC)',
+      photoURL: "./../assets/committees/disec_acas.jpg"
     },
     {
       id: '4',
-      name: 'World Health Organization (WHO)',
-      topic: 'Strengthening Global Pandemic Preparedness',
-      description: 'In light of recent global health crises, this committee will focus on improving international mechanisms for pandemic prevention, detection, and response. Delegates will address issues of vaccine equity, healthcare infrastructure, and international cooperation in public health emergencies.',
-      positions: ['United States', 'China', 'Germany', 'Japan', 'United Kingdom', 'France', 'India', 'Brazil', 'Italy', 'South Africa', 'Canada', 'Australia']
+      name: 'Joint Crisis Committee (JCC)',
+      photoURL: "./../assets/committees/jcc_acas.jpg"
     },
     {
       id: '5',
-      name: 'United Nations Children\'s Fund (UNICEF)',
-      topic: 'Ensuring Education Access in Conflict Zones',
-      description: 'This committee will address the challenges of providing education to children in areas affected by armed conflict and humanitarian crises. Delegates will explore solutions for protecting educational institutions, supporting displaced students, and maintaining continuity of learning in emergency situations.',
-      positions: ['United States', 'United Kingdom', 'Japan', 'Germany', 'France', 'Canada', 'Australia', 'Norway', 'Sweden', 'Netherlands', 'Denmark', 'Switzerland']
+      name: 'Crisis Committee (CC)',
+      photoURL: "./../assets/committees/cc_acas.jpg"
     },
     {
       id: '6',
-      name: 'United Nations Office on Drugs and Crime (UNODC)',
-      topic: 'Addressing Transnational Organized Crime in the Digital Age',
-      description: 'Delegates will tackle the evolving landscape of transnational organized crime, particularly cybercrime, human trafficking, and illicit financial flows. The committee will focus on strengthening international legal frameworks and improving cross-border cooperation to combat these threats.',
-      positions: ['United States', 'China', 'Russia', 'United Kingdom', 'France', 'Germany', 'Japan', 'India', 'Brazil', 'Italy', 'Canada', 'Australia']
+      name: 'International Olympic Committee (IOC)',
+      photoURL: ""
+    },
+    {
+      id: '7',
+      name: 'International Court of Justice (ICJ)',
+      photoURL: "./../assets/committees/icj_acas.jpg"
     }
   ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev === committees.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? committees.length - 1 : prev - 1));
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -57,58 +67,79 @@ const Committees: React.FC = () => {
         <div className="mb-8 text-center max-w-3xl mx-auto">
           <p className="text-lg">
             Our conference features six committees, each addressing a critical global issue. 
-            Click on a committee to learn more about its topic and available positions.
+            Navigate through the slides to learn more about each committee's ACAS sections.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {committees.map((committee) => (
-            <div
-              key={committee.id}
-              className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all ${
-                selectedCommittee === committee.id ? 'ring-2 ring-blue-500' : 'hover:shadow-lg'
-              }`}
-              onClick={() => setSelectedCommittee(selectedCommittee === committee.id ? null : committee.id)}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Slider Container */}
+          <div className="overflow-hidden rounded-lg shadow-xl">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              <h3 className="text-xl font-semibold mb-2">{committee.name}</h3>
-              <p className="text-blue-600 font-medium mb-2">{committee.topic}</p>
-              <p className="text-gray-600 line-clamp-3">
-                {committee.description}
-              </p>
-              <div className="mt-4 text-blue-600 font-medium">
-                {selectedCommittee === committee.id ? 'Click to collapse' : 'Click to expand'}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {selectedCommittee && (
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            {committees
-              .filter((committee) => committee.id === selectedCommittee)
-              .map((committee) => (
-                <div key={committee.id}>
+              {committees.map((committee) => (
+                <div key={committee.id} className="w-full flex-shrink-0 bg-white p-8">
                   <h2 className="text-2xl font-semibold mb-4">{committee.name}</h2>
-                  <h3 className="text-xl font-medium text-blue-600 mb-4">{committee.topic}</h3>
-                  <p className="mb-6">{committee.description}</p>
                   
                   <div>
-                    <h4 className="text-lg font-medium mb-3">Available Positions:</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {committee.positions.map((position) => (
-                        <div
-                          key={position}
-                          className="bg-gray-100 p-3 rounded text-center"
-                        >
-                          {position}
-                        </div>
-                      ))}
+                    <h4 className="text-lg font-medium mb-3">Academy members of the Committee</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
+                      <img src={committee.photoURL} alt={committee.name} />
                     </div>
                   </div>
                 </div>
               ))}
+            </div>
           </div>
-        )}
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md"
+            aria-label="Previous slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md"
+            aria-label="Next slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Dots Indicator */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {committees.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full ${currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'}`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Committee Preview */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
+          {committees.map((committee, index) => (
+            <div
+              key={committee.id}
+              className={`bg-white p-4 rounded-lg shadow-md cursor-pointer transition-all ${
+                currentSlide === index ? 'ring-2 ring-blue-500' : 'hover:shadow-lg'
+              }`}
+              onClick={() => goToSlide(index)}
+            >
+              <h3 className="text-sm font-semibold mb-1 line-clamp-2">{committee.name}</h3>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

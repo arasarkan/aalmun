@@ -8,6 +8,8 @@ import About from './pages/About';
 import Apply from './pages/Apply';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
+import Committees from './pages/Committees';
+import Team from './pages/Team';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +21,8 @@ const App: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/apply" element={<Apply />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/committees" element={<Committees />} />
+          <Route path="/team" element={<Team />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
