@@ -33,7 +33,7 @@ export const DelegationApplicationForm: React.FC<DelegationApplicationFormProps>
     'Council of the European Union (CEU)',
     'World Organization for Animal Health (WOAH)',
     'Disarmament and International Security Committee (DISEC)',
-    'Joint Crisis Committee (JCC)',
+    'Müşterek Kriz Komitesi (MKK)',
     'Crisis Committee (CC)',
     'International Olympic Committee (IOC)',
     'United States Customs Court (USCC)'

@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 interface CommitteeWithAcas {
   id: string;
   name: string;
-  photoURL: string;
+  agendaItem: string;
+  level: string;
+  members: string;
 }
 
 const Committees: React.FC = () => {
@@ -13,37 +15,51 @@ const Committees: React.FC = () => {
     {
       id: '1',
       name: 'Council of the European Union (CEU)',
-      photoURL: "./../assets/committees/ceu_acas.jpg"
+      agendaItem: "The Impact of Artificial Intelligence on Human Labor and Skills: Productivity and Cognitive Decline <br> While artificial intelligence is transforming Europe's industries, providing efficiency and competitiveness, it is also raising concerns about malfunctions, the breakdown of traditional processes, and excessive reliance on machines. The European Council is considering whether the economic decision should be to prioritize rapid AI transformation or to implement systems and education reforms to protect human labor, critical thinking, and equity among member states.",
+      level: "Intermediate",
+      members: "Under-Secretary General: Beren Ulaş <br> Academic Assistant: Alperen Köseoğulları"
     },
     {
       id: '2',
       name: 'World Organization for Animal Health (WOAH)',
-      photoURL: "./../assets/committees/woah_acas.jpg"
+      agendaItem: "Global Policy Proposals to Address Endemic Species Extinction.",
+      level: "Beginner",
+      members: "Under-Secretary General: Kaan Cansızoğlu <br> Academic Assistant: Ceren Çiftçi"
     },
     {
       id: '3',
       name: 'Disarmament and International Security Committee (DISEC)',
-      photoURL: "./../assets/committees/disec_acas.jpg"
+      agendaItem: "Safeguarding Maritime Routes from Pirate Threats and Illicit Trafficking",
+      level: "Beginner",
+      members: "Under-Secretary General: Lamia Zeyno Çelebi & Günselin Şanıer"
     },
     {
       id: '4',
-      name: 'Joint Crisis Committee (JCC)',
-      photoURL: "./../assets/committees/jcc_acas.jpg"
+      name: 'Müşterek Kriz Komitesi (MKK)',
+      agendaItem: " Vistül Nehri Havzası'ndaki Leh ve Çekoslovak şehirlerine NATO'nun ilk nükleer saldırısının ardından, Varşova Paktı komutanlarının Doğu Almanya'nın işgalini önlemek için ülkeye takviye gönderecekleri bir savaş senaryosuydu. Peki Varşova Paktı, 7 günde Ren Nehri'ne ve hatta 9 günde Lyon'a girebilecek mi, yoksa NATO bu saldırıya göğüs gerebilecek mi?",
+      level: "İleri",
+      members: "Komite Müsteşarı: Vasfi Kemal Bekar & Ali Başar Muslu <br> Kriz Ekip Üyesi: Kerem Okçu"
     },
     {
       id: '5',
       name: 'Crisis Committee (CC)',
-      photoURL: "./../assets/committees/cc_acas.jpg"
+      agendaItem: "Unification of Germany",
+      level: "Advanced",
+      members: "Under-Secretary General: Barış Tanrıverdi <br>Academic Assistant: Yaman Çınar Kahraman"
     },
     {
       id: '6',
       name: 'International Olympic Committee (IOC)',
-      photoURL: ""
+      agendaItem: "a) Strengthening the Reputation of  Inadequately Represented Olympic Teams and Athletes <br> b) Strengthening Anti-Doping Measures and Enhancing Integrity in Global Sport",
+      level: "asd",
+      members: "Under-Secretary General: Siyabend Aladağ"
     },
     {
       id: '7',
       name: 'International Court of Justice (ICJ)',
-      photoURL: "./../assets/committees/icj_acas.jpg"
+      agendaItem: "Assessing Allegations of War Crimes Committed within the Palestinian Territories",
+      level: "Advanced",
+      members: "Under-Secretary General: Kerem Çiçek <br>Academic Assistants: Ege Kağan Günçan & Ege Akengin"
     }
   ];
 
@@ -82,11 +98,27 @@ const Committees: React.FC = () => {
                 <div key={committee.id} className="w-full flex-shrink-0 bg-white p-8">
                   <h2 className="text-2xl font-semibold mb-4">{committee.name}</h2>
                   
-                  <div>
-                    <h4 className="text-lg font-medium mb-3">Academy members of the Committee</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
-                      <img src={committee.photoURL} alt={committee.name} />
+                  <div className="mb-4">
+                    <h4 className="text-lg font-medium mb-2">Agenda Item</h4>
+                    <div 
+                      className="text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: committee.agendaItem }}
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className="text-lg font-medium mb-2">Level</h4>
+                    <div className="bg-blue-100 text-blue-800 inline-block px-3 py-1 rounded-full text-sm font-medium">
+                      {committee.level}
                     </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-lg font-medium mb-2">Committee Members</h4>
+                    <div 
+                      className="text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: committee.members }}
+                    />
                   </div>
                 </div>
               ))}
