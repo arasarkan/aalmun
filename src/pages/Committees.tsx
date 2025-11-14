@@ -82,8 +82,7 @@ const Committees: React.FC = () => {
         
         <div className="mb-8 text-center max-w-3xl mx-auto">
           <p className="text-lg">
-            Our conference features six committees, each addressing a critical global issue. 
-            Navigate through the slides to learn more about each committee's ACAS sections.
+            Our conference features seven committees, each addressing a critical global issue. 
           </p>
         </div>
 
