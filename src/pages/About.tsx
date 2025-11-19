@@ -27,7 +27,7 @@ const About: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-lg font-medium mb-2">Date & Location</h3>
-                <p>9-10-11 February 2026</p>
+                <p>9-10-11 January 2026</p>
               </div>
               <div>
                 <h3 className="text-lg font-medium mb-2">Location</h3>
