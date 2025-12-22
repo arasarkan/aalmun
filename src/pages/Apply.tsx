@@ -7,6 +7,16 @@ import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
 import Button from '../components/UI/Button';
 
+// Geçici "Wait for Late Apps" bileşeni
+const WaitForLateAppsView: React.FC = () => (
+  <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+    <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
+      <h1 className="text-3xl font-bold mb-4">Wait for Late Apps</h1>
+      <p className="text-gray-600">Late applications will be available soon.</p>
+    </div>
+  </div>
+);
+
 interface LoadingViewProps {}
 const LoadingView: React.FC<LoadingViewProps> = () => (
   <div className="flex justify-center items-center h-screen" aria-live="polite">
@@ -74,6 +84,10 @@ const NoApplicationView: React.FC = () => (
 interface ApplyProps {}
 
 const Apply: React.FC<ApplyProps> = () => {
+  return <WaitForLateAppsView />;
+  
+  /* 
+  
   const { user } = useAuth();
   const { loading: isAppLoading, error } = useApplication(); // Use isAppLoading instead of loading
   const [showLogin, setShowLogin] = useState(true);
@@ -97,6 +111,7 @@ const Apply: React.FC<ApplyProps> = () => {
 
   // Always show the application container for authenticated users
   return <NoApplicationView />;
+  */
 };
 
 export default Apply;
