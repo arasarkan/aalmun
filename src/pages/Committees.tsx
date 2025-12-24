@@ -60,6 +60,20 @@ const Committees: React.FC = () => {
       agendaItem: "Assessing Allegations of War Crimes Committed within the Palestinian Territories",
       level: "Advanced",
       members: "Under-Secretary General: Kerem Çiçek <br>Academic Assistants: Ege Kağan Günçan & Ege Akengin"
+    },
+    {
+      id: '8',
+      name: 'International Maritime Organization (IMO)',
+      agendaItem: "Addressing Piracy Attacks Against Commercial Vessels in International Waters",
+      level: "Beginner",
+      members: "Under-Secretary General: Ali Ütük & Dora Saylıkoğlu"
+    },
+        {
+      id: '9',
+      name: 'World Health Organization (WHO)',
+      agendaItem: "Addressing the Global Mental Health Crisis, Especially Among Youth",
+      level: "Beginner",
+      members: "Under-Secretary General: Ceyda Şanan Acas Defne Koçak"
     }
   ];
 

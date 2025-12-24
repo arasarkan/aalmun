@@ -36,7 +36,9 @@ export const DelegationApplicationForm: React.FC<DelegationApplicationFormProps>
     'Müşterek Kriz Komitesi (MKK)',
     'Crisis Committee (CC)',
     'International Olympic Committee (IOC)',
-    'United States Customs Court (USCC)'
+    'United States Customs Court (USCC)',
+    'International Maritime Organization (IMO)',
+    'World Health Organization (WHO)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

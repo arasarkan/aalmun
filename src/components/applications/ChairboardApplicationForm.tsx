@@ -29,7 +29,9 @@ export const ChairboardApplicationForm: React.FC<ChairboardApplicationFormProps>
     'Joint Crisis Committee (JCC)',
     'Crisis Committee (CC)',
     'International Olympic Committee (IOC)',
-    'International Court of Justice (ICJ)'
+    'International Court of Justice (ICJ)',
+    'International Maritime Organization (IMO)',
+    'World Health Organization (WHO)'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

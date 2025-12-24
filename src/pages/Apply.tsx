@@ -1,26 +1,12 @@
-import React from 'react';
-// Geçici olarak kullanılmayan import'lar yorum satırına alındı
-// import { useState } from 'react';
-// import { useAuth } from '../hooks/useAuth';
-// import { useApplication } from '../hooks/useApplication';
-// import { ApplicationContainer } from '../components/applications/ApplicationContainer';
-// import LoginForm from '../components/auth/LoginForm';
-// import RegisterForm from '../components/auth/RegisterForm';
-// import Button from '../components/UI/Button';
+import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useApplication } from '../hooks/useApplication';
+import { ApplicationContainer } from '../components/applications/ApplicationContainer';
+import LoginForm from '../components/auth/LoginForm';
+import RegisterForm from '../components/auth/RegisterForm';
+import Button from '../components/UI/Button';
 
-// Geçici "Wait for Late Apps" bileşeni
-const WaitForLateAppsView: React.FC = () => (
-  <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-    <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
-      <h1 className="text-3xl font-bold mb-4">Wait for Late Apps</h1>
-      <p className="text-gray-600">Late applications will be available soon.</p>
-    </div>
-  </div>
-);
-
-// Geçici olarak kullanılmayan bileşenler yorum satırına alındı
-/*
-interface LoadingViewProps {}
+interface LoadingViewProps { }
 const LoadingView: React.FC<LoadingViewProps> = () => (
   <div className="flex justify-center items-center h-screen" aria-live="polite">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" role="status" aria-label="Loading page content">
@@ -81,15 +67,35 @@ const NoApplicationView: React.FC = () => (
     </div>
   </div>
 );
-*/
 
 // --- Main Apply Component ---
 
-interface ApplyProps {}
+interface ApplyProps { }
 
 const Apply: React.FC<ApplyProps> = () => {
-  // Geçici olarak sadece "Wait for Late Apps" sayfasını gösteriyoruz
-  return <WaitForLateAppsView />;
+  const { user } = useAuth();
+  const { loading: isAppLoading, error } = useApplication(); // Use isAppLoading instead of loading
+  const [showLogin, setShowLogin] = useState(true);
+
+  if (isAppLoading) { // Use the correct loading state
+    return <LoadingView />;
+  }
+
+  if (error) {
+    return <ErrorView error={error} />;
+  }
+
+  if (!user) {
+    return (
+      <UnauthenticatedView
+        showLogin={showLogin}
+        onToggleForm={() => setShowLogin(!showLogin)}
+      />
+    );
+  }
+
+  // Always show the application container for authenticated users
+  return <NoApplicationView />;
 };
 
 export default Apply;
