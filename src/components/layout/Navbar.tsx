@@ -140,13 +140,7 @@ const Navbar: React.FC = () => {
             >
               Committees
             </Link>
-            <Link
-              to="/apply"
-              className={`hover:text-red-200 ${isActive('/apply') ? 'text-red-200' : ''}`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Apply
-            </Link>
+
             {user && (
               <Link
                 to="/dashboard"
